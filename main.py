@@ -3,6 +3,7 @@ import argparse
 from utils.datetime import getDateTime
 from utils.json import readJson, writeJson
 from utils.inventory_seeds import promptForSeedInfo
+from utils.sprout_seeds import promptForSproutInfo
 
 
 parser = argparse.ArgumentParser(
@@ -16,4 +17,8 @@ parser.add_argument('-p', '--pot_sprouts', help = 'Pot sprouts, associating a po
 parser.add_argument('-l', '--plant_seedlings', help = 'Plant seedlings, associating a pot\'s serial number with a plot location.', action = 'store_true')
 args = parser.parse_args()
 
-promptForSeedInfo()
+if args.inventory_seeds:
+    promptForSeedInfo()
+
+if args.sprout_seeds:
+    promptForSproutInfo()

@@ -1,34 +1,31 @@
-import os, sys
+import os
 from utils.datetime import getDateTime
 from utils.json import readJson, writeJson
+from utils.prompt_utils import prompt
 
 filename = f'./json/seeds.json'
 seedsFileExists: bool = os.path.isfile(filename)
-defaultSeedsDict = {'seedDictList': []}
+defaultSeeds: dict = {'seedsDictsList': []}
 
 if not seedsFileExists:
-    writeJson(filename, defaultSeedsDict)
-
-def checkQuit(input: str) -> None:
-    if input.lower() in ['q', 'quit', 'e', 'exit']:
-        sys.exit(0)
+    writeJson(filename, defaultSeeds)
     
-def updateSeeds(currentSeeds: dict, newSeedInfo: list) -> dict:
-    currentSeedDictList = currentSeeds['seedDictList']
-    return {'seedDictList': currentSeedDictList + newSeedInfo}
+def updateSeeds(currentSeeds: dict, newSeedInfo: list[dict]) -> dict:
+    currentSeedDictList: list = currentSeeds['seedsDictsList']
+    return {'seedsDictsList': currentSeedDictList + newSeedInfo}
 
 def getSeedInfo() -> list:
-    seedName = input('Please enter the seed name: ')
-    checkQuit(seedName)
-    seedSerial = input('Please enter the seed serial: ')
-    checkQuit(seedSerial)
+    seedName: str = prompt('Please enter the seed name: ')
+    seedSerial: str = prompt('Please enter the seed serial: ')
+    seedUpc: str = prompt('Please enter the seed UPC: ')
+    seedQuantity: str = prompt('Please enter the seed quantity: ')
     
-    return [ { 'seedSerial': seedSerial, 'seedName': seedName, 'seedInventoryDate': getDateTime() } ]
+    return [ { 'seedSerial': seedSerial, 'seedName': seedName, 'seedUpc': seedUpc, 'seedQuantity': seedQuantity, 'seedInventoryDate': getDateTime() } ]
 
 def promptForSeedInfo() -> None:
     while True:
-        newSeedInfo: list = getSeedInfo()
+        newSeedInfo: list[dict] = getSeedInfo()
         currentSeeds: dict = readJson(filename)
         newSeeds: dict = updateSeeds(currentSeeds, newSeedInfo)
         writeJson(filename, newSeeds)
-
+        print('\n')
