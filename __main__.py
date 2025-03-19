@@ -1,4 +1,4 @@
-import argparse
+import argparse, os, sys
 
 from utils.datetime import getDateTime
 from utils.json import readJson, writeJson
@@ -17,8 +17,21 @@ parser.add_argument('-p', '--pot_sprouts', help = 'Pot sprouts, associating a po
 parser.add_argument('-l', '--plant_seedlings', help = 'Plant seedlings, associating a pot\'s serial number with a plot location.', action = 'store_true')
 args = parser.parse_args()
 
-if args.inventory_seeds:
-    promptForSeedInfo()
+def main():
 
-if args.sprout_seeds:
-    promptForSproutInfo()
+    if args.inventory_seeds:
+        promptForSeedInfo()
+
+    if args.sprout_seeds:
+        promptForSproutInfo()
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('\nReceived keyboard interrupt, exiting script.')
+        try:
+            sys.exit(130)
+        except SystemExit:
+            os._exit(130)
